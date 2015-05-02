@@ -24,13 +24,11 @@
 
     <div class="nytimes-container">
         <h3 id="nytimes-header" data-bind="text: nytTitle"></h3>
-        <span class="remove">Type in an address above and find relevant NYTimes articles here!</span>
+        <span class="remove">Type in an address above and find relevant NY Times articles here!</span>
         <ul id="nytimes-articles" class="article-list" data-bind="foreach: nytArticles">
             <li class="article">
-                <h4 data-bind="text: headline"></h4>
-                <p data-bind="text: abstract">
-                </p>
-                <a data-bind="attr: { href: url }, text: url">link</a>
+                <h4><a data-bind="attr: { href: url }, text: headline">link</a></h4>
+                <p data-bind="text: abstract"></p>
             </li>
         </ul>
     </div>
