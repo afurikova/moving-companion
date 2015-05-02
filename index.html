@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Your Moving Companion</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <img class="bgimg" data-bind="attr: { src: url }">
+
+    <form data-bind="submit: doSomething">
+        <label for="street">Street: </label><input data-bind="value: street">
+        <label for="city">City: </label><input data-bind="value: city">
+        <button data-bind="click: $root.clearArticles">Submit</button>
+    </form>
+    <hr>
+
+    <h2 id="greeting" class="greeting" data-bind="text: question"></h2>
+
+    <div class="wikipedia-container">
+        <h3 id="wikipedia-header">Relevant Wikipedia Links</h3>
+        <ul id="wikipedia-links">Type in an address above and find relevant Wikipedia articles here!</ul>
+    </div>
+
+    <div class="nytimes-container">
+        <h3 id="nytimes-header" data-bind="text: nytTitle"></h3>
+        <span class="remove">Type in an address above and find relevant NYTimes articles here!</span>
+        <ul id="nytimes-articles" class="article-list" data-bind="foreach: nytArticles">
+            <li class="article">
+                <h4 data-bind="text: headline"></h4>
+                <p data-bind="text: abstract">
+                </p>
+                <a data-bind="attr: { href: url }, text: url">link</a>
+            </li>
+        </ul>
+    </div>
+
+    <script type='text/javascript' src='js/knockout-3.1.0.js'></script>
+    <script src="js/libs/jquery.min.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
