@@ -6,7 +6,7 @@ $(document).ready(function () {
         this.url = ko.observable(url);
         this.headline = ko.observable(title);
     };
-    var Article = function (data) {
+    var NYTArticle = function (data) {
         this.url = ko.observable(data.web_url);
         this.abstract = ko.observable(data.snippet);
         this.headline = ko.observable(data.headline.main);
@@ -45,13 +45,13 @@ $(document).ready(function () {
             //console.log(self.url())
         };
         // send na ajax query consist of the given city parameter, create an 
-        // Article objects with relevant infos and push it to the list of NYT articles
+        // NYTArticle objects with relevant infos and push it to the list of NYT articles
         self.searchNYT = function () { // NYT does not support JSONP
             var query = "http://api.nytimes.com/svc/search/v2/articlesearch.json?q=" + self.city() + "&api-key=965ee1221d1e327b32a7ea49dd30ec95:3:71984632";
             var jqxhr = $.getJSON(query, function (data) {
                 //console.log( "success" );
                 $.each(data.response.docs, function (key, value) {
-                    self.nytArticles.push(new Article(value));
+                    self.nytArticles.push(new NYTArticle(value));
                 });
             })
             // chanied events
