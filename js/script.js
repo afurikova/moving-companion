@@ -31,6 +31,14 @@ $( document ).ready(function () {
         self.setBg();
         self.searchNYT();
         self.searchWiki();
+
+        if (self.city()) {
+          var newQuestion = "So, you wanna liv in " + self.city() + "?";
+          self.question(newQuestion);
+        } 
+        else {
+          self.question("Where do you want to live?");
+        }
       };
 
       self.setBg = function () {
@@ -59,7 +67,7 @@ $( document ).ready(function () {
         })
         // handle the results in case of wrong request
         .fail(function() {
-          console.log( "request error" );
+          //console.log( "request error" );
           self.nytTitle("NetworkError: 400 Bad Request!") 
         })
         // remove the text below the NY Times title in any case upon submitt
