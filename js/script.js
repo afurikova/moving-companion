@@ -1,7 +1,11 @@
 $( document ).ready(function () {
     console.log("DOM fully loaded and parsed");
 
-    // create a class for article objects
+    // create classes for article objects
+    var WikiArticle = function (title, url) {
+      this.url = ko.observable(url);
+      this.headline = ko.observable(title);
+    }
     var Article = function (data) {
       this.url = ko.observable(data.web_url);
       this.abstract = ko.observable(data.snippet);
@@ -13,16 +17,20 @@ $( document ).ready(function () {
       // data
       self.question = ko.observable("Where do you want to live?");
       self.nytTitle = ko.observable("New York Times Articles");
+      self.wikiTitle = ko.observable("Relevant Wikipedia Links");
       self.url = ko.observable("");
       self.street = ko.observable("");
       self.city = ko.observable("");
       self.nytArticles = ko.observableArray([]);
+      self.wikiArticles = ko.observableArray([]);
 
       // on submitt clear the list of NYT articles, set the street and city values and call the searchNYT function
       self.doSomething = function() {
         self.nytArticles([]);
+        self.wikiArticles([]);
         self.setBg();
         self.searchNYT();
+        self.searchWiki();
       };
 
       self.setBg = function () {
@@ -51,14 +59,48 @@ $( document ).ready(function () {
         })
         // handle the results in case of wrong request
         .fail(function() {
-          //console.log( "request error" );
+          console.log( "request error" );
           self.nytTitle("NetworkError: 400 Bad Request!") 
         })
         // remove the text below the NY Times title in any case upon submitt
         .always(function() {
           $( ".nytimes-container .remove" ).remove();
         });
-      };
+      }
+
+      // JSONP request does not have error handlers
+      // so we can solve the problem by setting up a timout function that would be cleared
+      // in case of succesfull query request
+      var wikiRequestTimeout = setTimeout(function () {
+        self.wikiTitle("NetworkError: 400 Bad Request!");
+        $( ".wikipedia-container .remove" ).remove();
+      }, 8000)
+
+      self.searchWiki = function () { // by calling callback function we make JSONP request
+        var query = "http://en.wikipedia.org/w/api.php?action=opensearch&search=" + self.city() + "&limit=10&format=json&callback=?";
+        var jqxhr = $.getJSON(query, function(data) {
+          //console.log(data[1])
+          for (var article in data[1]) { 
+            var articTitle = data[1][article]; // index 1 of the data represents a list of articles names
+            var articUrl = data[3][article]; // index 3 of the data represent a list urls
+            self.wikiArticles.push(new WikiArticle(articTitle, articUrl))
+          }
+        })
+        // chanied events
+        // handle the results if the request was succesful but no articles found
+        .done(function(data) { 
+          if (self.wikiArticles().length == 0) {
+            self.wikiTitle("Sorry, No related articles found!") 
+          } else {
+            self.wikiTitle("Relevant Wikipedia Links")
+          }
+          // when the request is done cancel the wikiRequestTimeout
+          clearTimeout(wikiRequestTimeout);
+        })
+        .always(function() {
+          $( ".wikipedia-container .remove" ).remove();
+        });
+      }
 }
 // refer to the bindings
 ko.applyBindings(new AppViewModel());

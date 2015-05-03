@@ -10,7 +10,7 @@
 
     <form data-bind="submit: doSomething">
         <label for="street">Street: </label><input data-bind="value: street">
-        <label for="city">City: </label><input data-bind="value: city">
+        <label for="city">City, coutnry: </label><input data-bind="value: city">
         <button data-bind="click: $root.clearArticles">Submit</button>
     </form>
     <hr>
@@ -18,8 +18,14 @@
     <h2 id="greeting" class="greeting" data-bind="text: question"></h2>
 
     <div class="wikipedia-container">
-        <h3 id="wikipedia-header">Relevant Wikipedia Links</h3>
-        <ul id="wikipedia-links">Type in an address above and find relevant Wikipedia articles here!</ul>
+        <h3 id="wikipedia-header" data-bind="text: wikiTitle"></h3>
+        <span class="remove">Type in an address above and find relevant Wikipedia articles here!</span>
+        <ul id="wikipedia-links" data-bind="foreach: wikiArticles">
+            <li>
+                <a data-bind="attr: { href: url }, text: headline">link</a>
+            </li>
+        </ul>
+
     </div>
 
     <div class="nytimes-container">
