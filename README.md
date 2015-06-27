@@ -1,4 +1,5 @@
 # moving-companion
+http://adica.me.cz/moving-companion/
 The Moving companion is an application that searches for a picture and information of given location 
 (street and city/country). I created this application while taking a course Intro to Ajax on www.udacity.com. 
 I wrote the code in JQuery and used Knockout js.
